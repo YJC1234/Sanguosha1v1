@@ -35,6 +35,9 @@ public class SunJian extends Player {
         handle_yinghun();
     }
 
+    /**
+     * 孙坚策略部分目前未完成
+     */
 
     @Override
     public void playStage() {

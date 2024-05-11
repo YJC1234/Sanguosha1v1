@@ -27,17 +27,21 @@ public class Sanguosha1v1Application implements ApplicationRunner {
         int tengFangLanWinCountWhenBegin = 0;
         int baiBanWinCountWhenBegin = 0;
         long averageRoundCount = 0;
+        long minHp = 10000;
         int nn = 20000;
         for (int i = 0; i < nn; i++) {
             Game.Result result = game.run(isTengFangLangBegin);
-            log.warn("第{}局，{}获胜，共进行{}轮", i + 1, result.winner.getName(), result.roundCount);
+            log.warn("第{}局，{}获胜，共进行{}轮,{}的血量剩余{}",
+                    i + 1, result.winner.getName(), result.roundCount, result.winner.getName(), result.winner.getHp());
             if (result.winner.getName().equals("滕芳兰")) {
                 tengFangLangWinCount++;
+                minHp = 0;
                 if (isTengFangLangBegin) {
                     tengFangLanWinCountWhenBegin++;
                 }
             } else {
                 baiBanWinCount++;
+                minHp = Math.min(minHp, result.winner.getHp());
                 if (!isTengFangLangBegin) {
                     baiBanWinCountWhenBegin++;
                 }
@@ -56,5 +60,6 @@ public class Sanguosha1v1Application implements ApplicationRunner {
                 nn, tengFangLangWinCount, game.getTwo().getName(), baiBanWinCount, tengFangLanWinCountWhenBegin,
                 game.getTwo().getName(), baiBanWinCountWhenBegin,
                 game.getTengFangLanDiedByShanDianCount(), formatRate, averageRoundCount, formatDieRate);
+        log.warn("{}最低血量为{}", game.getTwo().getName(), minHp);
     }
 }
