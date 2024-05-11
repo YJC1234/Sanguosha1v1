@@ -573,7 +573,9 @@ abstract public class Player {
                 hpChange(1);
             } else {
                 log.info("{}死亡", name);
-                diedByShanDian = true;
+                if (isShanDian) {
+                    diedByShanDian = true;
+                }
                 return;
             }
         }

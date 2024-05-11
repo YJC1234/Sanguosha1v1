@@ -131,7 +131,7 @@ public class TengFangLan extends Player {
             luochongCount--;
             log.info("{}进入濒死状态，发动技能“哀尘”，移除一个选项，还剩{}个选项", name, luochongCount);
         }
-        super.isDying();
+        super.isDying(false);
     }
 
     @Override
