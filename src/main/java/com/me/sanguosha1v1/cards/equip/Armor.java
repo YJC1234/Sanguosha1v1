@@ -15,6 +15,9 @@ public class Armor extends Card {
         //装备到防具区
         Card oldArmor = from.getArmor();
         if (oldArmor != null) {
+            if (!from.isArmorPriorityHigher(this.name, oldArmor.getName())) {
+                return;
+            }
             from.discardOne(oldArmor);
         }
         from.setArmor(this);

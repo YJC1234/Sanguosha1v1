@@ -13,9 +13,14 @@ public class Weapon extends Card {
 
     @Override
     public void realActive(Player from, Player to) {
+        //获取from的武器使用优先队列
+
         //装备到武器区
         Card oldWeapon = from.getWeapon();
         if (oldWeapon != null) {
+            if (!from.isWeaponPriorityHigher(this.name, oldWeapon.getName())) {
+                return;
+            }
             from.discardOne(oldWeapon);
         }
         from.setWeapon(this);

@@ -100,6 +100,11 @@ public class TengFangLan extends Player {
         luochongOptions.set(3, true);
     }
 
+    @Override
+    protected void drawStage() {
+        super.drawStage();
+    }
+
     /**
      * 哀尘:
      * 锁定技，当你进入濒死状态时，若“落宠”中可选选项数大于1，则你回复体力值至1，然后移除“落宠”中的一个选项。
@@ -350,7 +355,7 @@ public class TengFangLan extends Player {
     @Override
     protected Card chooseDiscardOne() {
         //弃牌优先级，在前的保留，其他的优先级最低
-        List<String> priority = List.of("闪电", "顺手牵羊", "过河拆桥", "桃", "无懈可击", "+1马", "藤甲");
+        List<String> priority = List.of("闪电", "桃", "闪", "无懈可击", "顺手牵羊", "过河拆桥", "+1马", "藤甲", "闪", "杀");
         Card discard = null;
         for (Card handCard : handCards) {
             if (!priority.contains(handCard.getName())) {

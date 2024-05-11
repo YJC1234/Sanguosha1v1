@@ -12,9 +12,9 @@ logging:
 
 app:
   one-config:
-    name: "滕芳兰"
-    hp: 3
-    maxHp: 3
+    name: "孙坚"
+    hp: 4
+    maxHp: 10
     hand-cards: [ ]
   two-config:
     name: "10000血白板"

@@ -2,9 +2,11 @@ package com.me.sanguosha1v1.players;
 
 import com.me.sanguosha1v1.Desk;
 import com.me.sanguosha1v1.cards.Card;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
+@Slf4j
 public class BaiBan extends Player {
     public BaiBan(Desk desk) {
         super(desk);
@@ -12,6 +14,10 @@ public class BaiBan extends Player {
 
     @Override
     public void playStage() {
+        if (round < 100) {
+            log.info("挂机中");
+            return;
+        }
         /**
          * //如果在一次出牌决策中使用了牌，就重复决策,直到不使用牌为止
          */
@@ -138,7 +144,26 @@ public class BaiBan extends Player {
     @Override
     protected Card chooseDiscardOne() {
         //测试弃牌策略，随机弃1张
-        return handCards.getFirst();
+        if (!handCards.isEmpty()) {
+            return handCards.getFirst();
+        }
+        if (haveWeapon()) {
+            return getWeapon();
+        }
+        if (haveSubHorse()) {
+            return getSubHorse();
+        }
+        if (haveAddHorse()) {
+            return getAddHorse();
+        }
+        if (haveArmor()) {
+            return getArmor();
+        }
+        if (haveTreasure()) {
+            return getTreasure();
+        }
+        log.error("弃牌策略出错");
+        return null;
     }
 
     @Override

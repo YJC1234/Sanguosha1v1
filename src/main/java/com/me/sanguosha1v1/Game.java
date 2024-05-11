@@ -3,7 +3,7 @@ package com.me.sanguosha1v1;
 import com.me.sanguosha1v1.exception.DeskEmptyException;
 import com.me.sanguosha1v1.players.BaiBan;
 import com.me.sanguosha1v1.players.Player;
-import com.me.sanguosha1v1.players.TengFangLan;
+import com.me.sanguosha1v1.players.SunJian;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,6 +11,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -50,7 +51,7 @@ public class Game {
         roundCount = 1;
         desk.reset();
 
-        one = new TengFangLan(desk);
+        one = new SunJian(desk);
         two = new BaiBan(desk);
 
         one.setEnemy(two);
@@ -58,12 +59,16 @@ public class Game {
         one.setHandCards(desk.draw(4)); //随机抽4张初试手牌
         one.setTreasureCards(new ArrayList<>(5));
         one.setJudgeCards(new ArrayList<>());
+        one.setWeaponPriority(List.of("古锭刀", "诸葛连弩", "丈八蛇矛"));
+        one.setArmorPriority(List.of("藤甲", "八卦阵", "仁王盾", "白银狮子"));
 
         two.setEnemy(one);
         BeanUtils.copyProperties(playerProperty.getTwoConfig(), two);
         two.setHandCards(desk.draw(4)); //随机抽4张初试手牌
         two.setTreasureCards(new ArrayList<>(5));
         two.setJudgeCards(new ArrayList<>());
+        two.setWeaponPriority(List.of("古锭刀", "诸葛连弩", "丈八蛇矛"));
+        two.setArmorPriority(List.of("藤甲", "八卦阵", "仁王盾", "白银狮子"));
 
     }
 

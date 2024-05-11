@@ -28,12 +28,12 @@ public class Sanguosha1v1Application implements ApplicationRunner {
         int baiBanWinCountWhenBegin = 0;
         long averageRoundCount = 0;
         long minHp = 10000;
-        int nn = 20000;
+        int nn = 10000;
         for (int i = 0; i < nn; i++) {
             Game.Result result = game.run(isTengFangLangBegin);
             log.warn("第{}局，{}获胜，共进行{}轮,{}的血量剩余{}",
                     i + 1, result.winner.getName(), result.roundCount, result.winner.getName(), result.winner.getHp());
-            if (result.winner.getName().equals("滕芳兰")) {
+            if (result.winner.getName().equals("孙坚")) {
                 tengFangLangWinCount++;
                 minHp = 0;
                 if (isTengFangLangBegin) {
@@ -55,11 +55,11 @@ public class Sanguosha1v1Application implements ApplicationRunner {
         String formatRate = String.format("%.2f", tengFangLanWinRate * 100);
         double dieByShanDianRate = (double) game.getTengFangLanDiedByShanDianCount() / baiBanWinCount;
         String formatDieRate = String.format("%.2f", dieByShanDianRate * 100);
-        log.warn("一共{}局\n滕芳兰获胜{}局，{}获胜{}局\n滕芳兰先手获胜{}局，{}先手获胜{}局\n滕芳兰被闪电劈死有{}局\n" +
-                        "滕芳兰胜率为{}% 平均回合数为{}\n滕芳兰输的局中{}%被闪电劈死",
+        log.warn("一共{}局\n孙坚获胜{}局，{}获胜{}局\n孙坚先手获胜{}局，{}先手获胜{}局\n" +
+                        "孙坚胜率为{}% 平均回合数为{}\n",
                 nn, tengFangLangWinCount, game.getTwo().getName(), baiBanWinCount, tengFangLanWinCountWhenBegin,
                 game.getTwo().getName(), baiBanWinCountWhenBegin,
-                game.getTengFangLanDiedByShanDianCount(), formatRate, averageRoundCount, formatDieRate);
+                formatRate, averageRoundCount);
         log.warn("{}最低血量为{}", game.getTwo().getName(), minHp);
     }
 }

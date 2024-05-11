@@ -10,6 +10,7 @@ import com.me.sanguosha1v1.cards.equip.*;
 import com.me.sanguosha1v1.cards.skill.*;
 import com.me.sanguosha1v1.cards.timeSkill.BingLiangCunDuan;
 import com.me.sanguosha1v1.cards.timeSkill.LeBuSiShu;
+import com.me.sanguosha1v1.cards.timeSkill.ShanDian;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -187,8 +188,8 @@ public class Desk {
         drawCards.add(new TieSuoLianHuan(10, ColorType.CLUB));
         drawCards.add(new TieSuoLianHuan(11, ColorType.CLUB));
         //闪电（2张，标准版♤A，EX♡Q）。
-//        drawCards.add(new ShanDian(1, ColorType.SPADE));
-//        drawCards.add(new ShanDian(12, ColorType.HEART));
+        drawCards.add(new ShanDian(1, ColorType.SPADE));
+        drawCards.add(new ShanDian(12, ColorType.HEART));
         //无懈可击（7张）。
         //标准版（♧QK♤J）
         //EX（♢Q）

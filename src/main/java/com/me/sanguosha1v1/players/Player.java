@@ -69,6 +69,9 @@ abstract public class Player {
     protected Integer round;//当前的回合数
     protected boolean diedByShanDian; //是否被闪电劈死
 
+    protected List<String> weaponPriority;//武器使用优先队列
+    protected List<String> armorPriority;//防具使用优先队列
+
 
     //目标为自己/所有人的牌名
     public static List<String> targetSelfNames =
@@ -216,7 +219,7 @@ abstract public class Player {
     public List<Card> discard(int count) {
         List<Card> removeCards = new ArrayList<>();
         for (int i = 0; i < count; i++) {
-            if (!haveAnyCard()) {
+            if (!haveAnyHandCardOrEquip()) {
                 return removeCards;
             }
             Card card = chooseDiscardOne();
@@ -763,6 +766,34 @@ abstract public class Player {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 判断new武器优先级是否比old武器更高
+     */
+    public boolean isWeaponPriorityHigher(String newWeapon, String oldWeapon) {
+        //如果new不在列表，返回false
+        if (!weaponPriority.contains(newWeapon)) {
+            return false;
+        }
+        if (!weaponPriority.contains(oldWeapon)) {
+            return true;
+        }
+        return weaponPriority.indexOf(newWeapon) < weaponPriority.indexOf(oldWeapon);
+    }
+
+    /**
+     * 判断new防具优先级是否比old防具更高
+     */
+    public boolean isArmorPriorityHigher(String newArmor, String oldArmor) {
+        //如果new不在列表，返回false
+        if (!armorPriority.contains(newArmor)) {
+            return false;
+        }
+        if (!armorPriority.contains(oldArmor)) {
+            return true;
+        }
+        return armorPriority.indexOf(newArmor) < armorPriority.indexOf(oldArmor);
     }
 
 
