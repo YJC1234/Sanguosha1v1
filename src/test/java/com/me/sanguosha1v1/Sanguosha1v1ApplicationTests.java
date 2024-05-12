@@ -1,10 +1,11 @@
 package com.me.sanguosha1v1;
 
 import com.me.sanguosha1v1.cards.ColorType;
-import com.me.sanguosha1v1.cards.skill.ShunShouQianYang;
 import com.me.sanguosha1v1.cards.skill.WuXieKeJi;
+import com.me.sanguosha1v1.cards.skill.WuZhongShengYou;
 import com.me.sanguosha1v1.players.BaiBan;
 import com.me.sanguosha1v1.players.Player;
+import com.me.sanguosha1v1.players.SunJian;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,7 @@ class Sanguosha1v1ApplicationTests {
     @BeforeEach
     public void init() {
         log.info("初始化测试");
-        one = new BaiBan(desk);
+        one = new SunJian(desk);
         two = new BaiBan(desk);
         BeanUtils.copyProperties(playerProperty.getOneConfig(), one);
         BeanUtils.copyProperties(playerProperty.getTwoConfig(), two);
@@ -39,11 +40,10 @@ class Sanguosha1v1ApplicationTests {
     }
 
     @Test
-    void TestTieSuoLianHuan() {
-        one.addCard(new ShunShouQianYang(1, ColorType.HEART));
+    void TestSunJian() {
+        two.addCard(new WuZhongShengYou(1, ColorType.HEART));
         one.addCard(new WuXieKeJi(1, ColorType.HEART));
-        two.addCard(new WuXieKeJi(1, ColorType.HEART));
-        one.update();
+        two.update();
     }
 
 }

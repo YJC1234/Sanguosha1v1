@@ -17,6 +17,6 @@ public class TaoYuanJieYi extends Card {
     @Override
     public void realActive(Player from, Player to) {
         from.hpChange(1);
-        to.hpChange(1);
+        from.getEnemy().hpChange(1);
     }
 }

@@ -67,7 +67,7 @@ public class Game {
         two.setHandCards(desk.draw(4)); //随机抽4张初试手牌
         two.setTreasureCards(new ArrayList<>(5));
         two.setJudgeCards(new ArrayList<>());
-        two.setWeaponPriority(List.of("古锭刀", "诸葛连弩", "丈八蛇矛"));
+        two.setWeaponPriority(List.of("寒冰剑", "麒麟弓", "诸葛连弩"));
         two.setArmorPriority(List.of("藤甲", "八卦阵", "仁王盾", "白银狮子"));
 
     }

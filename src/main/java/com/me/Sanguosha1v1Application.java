@@ -28,7 +28,7 @@ public class Sanguosha1v1Application implements ApplicationRunner {
         int baiBanWinCountWhenBegin = 0;
         long averageRoundCount = 0;
         long minHp = 10000;
-        int nn = 10000;
+        int nn = 1;
         for (int i = 0; i < nn; i++) {
             Game.Result result = game.run(isTengFangLangBegin);
             log.warn("第{}局，{}获胜，共进行{}轮,{}的血量剩余{}",

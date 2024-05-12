@@ -14,10 +14,6 @@ public class BaiBan extends Player {
 
     @Override
     public void playStage() {
-        if (round < 100) {
-            log.info("挂机中");
-            return;
-        }
         /**
          * //如果在一次出牌决策中使用了牌，就重复决策,直到不使用牌为止
          */

@@ -6,7 +6,7 @@ spring:
 
 logging:
   level:
-    root: warn
+    root: info
   pattern:
     console: "%msg%n"
 
