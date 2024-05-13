@@ -169,7 +169,7 @@ public class SunJian extends Player {
      * 放入木马牌的策略
      */
     private Card chooseOne_muma() {
-        List<String> priority = List.of("无懈可击", "桃", "+1马", "过河拆桥", "闪", "顺手牵羊");
+        List<String> priority = List.of("无懈可击", "过河拆桥");
         for (String cardName : priority) {
             Card find = handCards.stream().filter(card -> card.getName().equals(cardName)).findFirst().orElse(null);
             if (find != null) {
@@ -180,48 +180,74 @@ public class SunJian extends Player {
     }
 
     /**
-     * 主动弃牌时的策略
-     *
-     * @return
+     * 手上由多少张是name的牌
      */
-    @Override
-    protected Card chooseDiscardOne() {
-        if (!(haveArmor() || haveAddHorse() || haveTreasure()) || hp <= 5) {
-            List<String> priority = List.of("无懈可击", "桃", "闪", "杀", "过河拆桥", "顺手牵羊");
-            for (Card card : handCards) {
-                if (!priority.contains(card.getName())) {
-                    return card;
-                }
-            }
-            priority = priority.reversed();
-            for (String cardName : priority) {
-                //如果手上有名称cardName的牌，选择
-                List<Card> cards = handCards.stream().filter(card -> card.getName().equals(cardName)).toList();
-                if (!cards.isEmpty()) {
-                    return cards.getFirst();
-                }
-            }
-        }
-        //弃牌策略
-        List<String> priority2 = List.of("无懈可击", "过河拆桥", "+1马", "藤甲", "桃", "顺手牵羊", "闪", "杀");
+    private int getHandCardCount(String cardName) {
+        return (int) handCards.stream().filter(card -> card.nameIs(cardName)).count();
+    }
+
+    private Card getCardFromPriority(List<String> priority) {
         for (Card card : handCards) {
-            if (!priority2.contains(card.getName())) {
+            if (!priority.contains(card.getName())) {
+                //不在Priority里，非核心牌，直接扔掉
                 return card;
             }
         }
-        priority2 = priority2.reversed();
-        for (String cardName : priority2) {
+        priority = priority.reversed();
+        for (String cardName : priority) {
             //如果手上有名称cardName的牌，选择
             List<Card> cards = handCards.stream().filter(card -> card.getName().equals(cardName)).toList();
             if (!cards.isEmpty()) {
-                if (cards.getFirst().nameIs("闪") && armorIs("藤甲") && cards.size() == 1) {
+                Card card = cards.isEmpty() ? null : cards.getFirst();
+                //留的全是无懈，这个牌可以扔掉了
+                if (getHandCardCount("无懈可击") == hp) {
+                    return card;
+                }
+                //只有1个桃，保留
+                if (card.nameIs("桃") && getCardsInHandorTreasure("桃").size() == 1) {
+                    continue;
+                }
+                //桃和无懈加起来超过hp，其他就可以扔掉了
+                if (getHandCardCount("桃") + getHandCardCount("无懈可击") > hp) {
+                    return card;
+                }
+                //没+1，保留1闪
+                if (card.nameIs("闪") && getCardsInHandorTreasure("闪").size() == 1 && !haveAddHorse()) {
+                    continue;
+                }
+                //保留1杀，防决斗/南蛮
+                if (card.nameIs("杀") && getCardsInHandorTreasure("杀").size() == 1) {
                     continue;
                 }
                 return cards.getFirst();
             }
         }
-        //所有都不满足，弃掉第一张
         return handCards.getFirst();
+    }
+
+
+    /**
+     * 主动弃牌时的策略
+     * 核心逻辑
+     *
+     * @return
+     */
+    @Override
+    protected Card chooseDiscardOne() {
+        List<String> priority;
+
+
+        if (haveAddHorse() || armorIs("藤甲")) {
+            priority = List.of("无懈可击", "过河拆桥", "+1马", "-1马", "桃", "杀");
+            return getCardFromPriority(priority);
+        }
+        //这时候没防装了，需要全力保护状态。
+        if (hp < 7) {
+            priority = List.of("桃", "闪", "无懈可击", "+1马", " 过河拆桥", "杀", "顺手牵羊");
+            return getCardFromPriority(priority);
+        }
+        priority = List.of("无懈可击", "过河拆桥", "桃", "闪", "顺手牵羊", "+1马", "-1马", "顺手牵羊");
+        return getCardFromPriority(priority);
     }
 
     @Override
@@ -266,25 +292,30 @@ public class SunJian extends Player {
         if (from == this) { //自己用的锦囊，不打反无懈
             return to == this;
         }
-        if (card.nameIs("无中生有")) {
-            return false;
-        }
-        if (!(haveArmor() || haveAddHorse() || haveTreasure()) || hp <= 2) {
+        if (!(haveArmor() || haveAddHorse() || haveTreasure())) {
             if (card.nameIs("决斗")) {
-                return false;
+                return getCardsInHandorTreasure("桃") != null;
             }
             if (card.nameIs("南蛮入侵")) {
                 //如果手上没杀 且没有藤甲，返回false,否则返回true
-                return haveCardInHandorTreasure("杀") || armorIs("藤甲");
+                return haveCardInHandorTreasure("杀") || armorIs("藤甲")
+                        || getCardsInHandorTreasure("桃") != null;
             }
             if (card.nameIs("万箭齐发")) {
-                return haveCardInHandorTreasure("闪") || armorIs("藤甲");
+                return haveCardInHandorTreasure("闪") || armorIs("藤甲")
+                        || getCardsInHandorTreasure("桃") != null;
             }
         }
-        if (hp > 4) {
-            return !(card.nameIs("顺手牵羊") || card.nameIs("过河拆桥"));
+        if (hp > 2) {
+            if (card.nameIs("顺手牵羊") || card.nameIs("过河拆桥")) {
+                return false;
+            }
+            if (card.nameIs("决斗")) {
+                return getCardInHandOrTreasure("桃") != null;
+            }
+            return true;
         }
-        if (card.nameIs("决斗") || card.nameIs("顺手牵羊") || card.nameIs("过河拆桥")) {
+        if (card.nameIs("顺手牵羊") || card.nameIs("过河拆桥")) {
             return false;
         }
         if (card.nameIs("南蛮入侵")) {

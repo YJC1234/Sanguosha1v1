@@ -21,6 +21,10 @@ public class NanManRuQin extends Card {
         }
         if (to.haveCardInHandorTreasure("杀")) {
             to.doCard("杀");
+        } else if (to.haveCardInHandorTreasure("雷杀")) {
+            to.doCard("雷杀");
+        } else if (to.haveCardInHandorTreasure("火杀")) {
+            to.doCard("火杀");
         } else {
             to.hpChange(-1);
         }
